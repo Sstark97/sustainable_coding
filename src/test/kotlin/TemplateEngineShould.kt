@@ -20,13 +20,13 @@ import org.junit.jupiter.api.Test
 internal class TemplateEngineShould {
     @Test
     fun `parse a template in blank without variables`() {
-        assertThat(TemplateEngine.parse("", mapOf<String, String>()))
+        assertThat(TemplateEngine.parse("", emptyMap()))
             .isEqualTo(Template(""))
     }
 
     @Test
     fun `parse a template without variables`() {
-        assertThat(TemplateEngine.parse("hola", mapOf<String, String>()))
+        assertThat(TemplateEngine.parse("hola", emptyMap()))
             .isEqualTo(Template("hola"))
     }
 
@@ -50,7 +50,7 @@ internal class TemplateEngineShould {
 
     @Test
     fun `register a warning in a log list when a variable in the template it's not provided`() {
-        val parsedTemplate = TemplateEngine.parse("{\$var1}", mapOf<String, String>())
+        val parsedTemplate = TemplateEngine.parse("{\$var1}", emptyMap())
 
         assertThat(parsedTemplate).isEqualTo(Template("{\$var1}"))
         assertThat(parsedTemplate.showLogs())
