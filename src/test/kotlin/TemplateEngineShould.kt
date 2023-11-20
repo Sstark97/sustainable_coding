@@ -48,12 +48,6 @@ internal class TemplateEngineShould {
         )).isEqualTo(Template("hello world!"))
     }
 
-    /**
-     * Opciones:
-     * 1. Que no remplace y lo deje igual -> {$var1}
-     * 2. Que lance una excepción -> La variable var1 no se ha encontrado
-     * 3. Que no lo remplace y guarde el fallo en algún sistema de logs -> "{$var1}" | Logs[La variable var1 no se ha encontrado]
-     */
     @Test
     fun `register a warning in a log list when a variable in the template it's not provided`() {
         val parsedTemplate = TemplateEngine.parse("{\$var1}", mapOf<String, String>())
