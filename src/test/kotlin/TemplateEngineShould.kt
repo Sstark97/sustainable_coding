@@ -64,4 +64,12 @@ internal class TemplateEngineShould {
             mapOf<String, String>(Pair("placeholder", "hello"))
         )).isEqualTo(Template("hello hello hello"))
     }
+
+    @Test
+    fun `parse a template with two variables`() {
+        assertThat(TemplateEngine.parse(
+            "hello {\$var1} {\$var2}",
+            mapOf<String, String>(Pair("var1", "my"), Pair("var2", "friend!"))
+        )).isEqualTo(Template("hello my friend!"))
+    }
 }
