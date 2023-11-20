@@ -19,4 +19,9 @@ internal class TemplateEngineShould {
     fun `parse a template in blank without variables`() {
         assertThat(TemplateEngine.parse("", mapOf<String, String>())).isEqualTo("")
     }
+
+    @Test
+    fun `parse a template without variables`() {
+        assertThat(TemplateEngine.parse("hola", mapOf<String, String>())).isEqualTo("hola")
+    }
 }
