@@ -8,9 +8,12 @@ import org.junit.jupiter.api.Test
  *  null, null -> ???
  *  "", [] -> ???
  *  "hola", [] -> "hola"
- *  "{$var1}", [] -> ???
- *  "{$var1}", [$var2: hola] -> ???
  *  "hola {$placeholder}", [$placeholder: mundo] -> "hola mundo"
+ *  "hello {$placeholder}", [$placeholder: world!] -> "hello world!"
+ *  "hello {$var1}", [$var1: world!] -> "hello world!"
+ *  "{$var1}", [] -> ???
+ *  "hello {$var1} ${var2}", [$var1: my, $var2: friend!] -> "hello my friend!"
+ *  "{$var1}", [$var2: hola] -> ???
  *  "hola {$a1} {$b2} {$a1}", [$a1: foo, $b2: bar] -> "hola foo bar foo"
  *  "hola {$a1} {$b2}", [$a1: foo] -> ???
  */
