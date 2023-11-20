@@ -5,5 +5,9 @@ class TemplateEngine {
         fun parse(template: String, templateVariables: Map<String, String>): String {
             return template
         }
+
+        fun showLogs(): Any {
+            TODO("Not yet implemented")
+        }
     }
 }

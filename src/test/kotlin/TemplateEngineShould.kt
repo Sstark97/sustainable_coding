@@ -24,4 +24,16 @@ internal class TemplateEngineShould {
     fun `parse a template without variables`() {
         assertThat(TemplateEngine.parse("hola", mapOf<String, String>())).isEqualTo("hola")
     }
+
+    /**
+     * Opciones:
+     * 1. Que no remplace y lo deje igual -> {$var1}
+     * 2. Que lance una excepción -> La variable var1 no se ha encontrado
+     * 3. Que no lo remplace y guarde el fallo en algún sistema de logs -> "{$var1}" | Logs[La variable var1 no se ha encontrado]
+     */
+    @Test
+    fun `with a variable in the template but variables are empty do something`() {
+        assertThat(TemplateEngine.parse("{\$var1}", mapOf<String, String>())).isEqualTo("{\$var1}")
+        assertThat(TemplateEngine.showLogs()).isEqualTo(listOf("La variable var1 no se ha podido sustituir porque no fue encontrada"))
+    }
 }
