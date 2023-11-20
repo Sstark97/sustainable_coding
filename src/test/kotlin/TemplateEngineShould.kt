@@ -54,9 +54,12 @@ internal class TemplateEngineShould {
      * 2. Que lance una excepción -> La variable var1 no se ha encontrado
      * 3. Que no lo remplace y guarde el fallo en algún sistema de logs -> "{$var1}" | Logs[La variable var1 no se ha encontrado]
      */
-//    @Test
-//    fun `with a variable in the template but variables are empty register the event in a log list`() {
-//        assertThat(TemplateEngine.parse("{\$var1}", mapOf<String, String>())).isEqualTo("{\$var1}")
-//        assertThat(TemplateEngine.showLogs()).isEqualTo(listOf("The variable var1 could not be replaced because it was not found"))
-//    }
+    @Test
+    fun `register a warning in a log list when a variable in the template it's not provided`() {
+        val parsedTemplate = TemplateEngine.parse("{\$var1}", mapOf<String, String>())
+
+        assertThat(parsedTemplate).isEqualTo(Template("{\$var1}"))
+        assertThat(parsedTemplate.showLogs())
+            .isEqualTo(listOf("The variable var1 could not be replaced because it was not found"))
+    }
 }
