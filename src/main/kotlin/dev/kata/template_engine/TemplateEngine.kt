@@ -4,11 +4,17 @@ class TemplateEngine {
     companion object {
         fun parse(template: String, templateVariables: Map<String, String>): Template {
             val warnings = mutableListOf<String>()
-            val parsedTemplate = template.replace(Regex("\\{\\$\\w+\\}")) { matchResult ->
-                val key = matchResult.value.substring(2, matchResult.value.length - 1)
-                templateVariables[key] ?: run {
+            val variableRegex = Regex("\\{\\$\\w+\\}")
+            val parsedTemplate = template.replace(variableRegex) { match ->
+                val matchValue = match.value
+                val key = matchValue.substring(2, matchValue.length - 1)
+                val variableValue = templateVariables.get(key)
+
+                if (variableValue.isNullOrBlank()) {
                     warnings.add("The variable $key could not be replaced because it was not found")
-                    matchResult.value
+                    matchValue
+                } else {
+                    variableValue
                 }
             }
             return Template(parsedTemplate, warnings)
