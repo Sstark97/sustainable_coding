@@ -16,7 +16,7 @@ import org.junit.jupiter.api.Test
  */
 internal class TemplateEngineShould {
     @Test
-    fun `parse a simple template without variables`() {
+    fun `parse a template in blank without variables`() {
         assertThat(TemplateEngine.parse("", mapOf<String, String>())).isEqualTo("")
     }
 }
