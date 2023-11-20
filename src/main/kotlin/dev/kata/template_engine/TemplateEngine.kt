@@ -4,7 +4,7 @@ class TemplateEngine {
     companion object {
         fun parse(template: String, templateVariables: Map<String, String>): Template {
             var parsedTemplate = template
-            val warnings = mutableListOf<String>()
+            val warnings = mutableListOf<Warning>()
             val variables = findAllVariablesIn(template)
 
             variables.forEach { match ->
@@ -12,7 +12,9 @@ class TemplateEngine {
                 val variableValue = templateVariables.get(key)
 
                 if (variableValue.isNullOrBlank()) {
-                    warnings.add("The variable $key could not be replaced because it was not found")
+                    warnings.add(
+                        Warning("The variable $key could not be replaced because it was not found")
+                    )
                 } else {
                     parsedTemplate = parsedTemplate.replace("{\$" + key + "}", variableValue)
                 }

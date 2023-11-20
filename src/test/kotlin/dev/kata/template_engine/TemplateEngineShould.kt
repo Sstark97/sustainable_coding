@@ -1,5 +1,8 @@
-package dev.kata.template_engine
+package dev.kata.template_engine.dev.kata.template_engine
 
+import dev.kata.template_engine.Template
+import dev.kata.template_engine.TemplateEngine
+import dev.kata.template_engine.Warning
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -34,25 +37,33 @@ internal class TemplateEngineShould {
 
     @Test
     fun `parse a template with one variable`() {
-        assertThat(TemplateEngine.parse(
-            "hola {\$placeholder}",
-            mapOf<String, String>(Pair("placeholder", "mundo"))
-        )).isEqualTo(Template("hola mundo", emptyList()))
+        assertThat(
+            TemplateEngine.parse(
+                "hola {\$placeholder}",
+                mapOf<String, String>(Pair("placeholder", "mundo"))
+            )
+        ).isEqualTo(Template("hola mundo", emptyList()))
 
-        assertThat(TemplateEngine.parse(
-            "hello {\$placeholder}",
-            mapOf<String, String>(Pair("placeholder", "world!"))
-        )).isEqualTo(Template("hello world!", emptyList()))
+        assertThat(
+            TemplateEngine.parse(
+                "hello {\$placeholder}",
+                mapOf<String, String>(Pair("placeholder", "world!"))
+            )
+        ).isEqualTo(Template("hello world!", emptyList()))
 
-        assertThat(TemplateEngine.parse(
-            "hello {\$var1}",
-            mapOf<String, String>(Pair("var1", "world!"))
-        )).isEqualTo(Template("hello world!", emptyList()))
+        assertThat(
+            TemplateEngine.parse(
+                "hello {\$var1}",
+                mapOf<String, String>(Pair("var1", "world!"))
+            )
+        ).isEqualTo(Template("hello world!", emptyList()))
     }
     @Test
     fun `register a warning in a log list when a variable in the template it's not provided`() {
         val parsedTemplate = TemplateEngine.parse("{\$var1}", emptyMap())
-        val expectedWarnings = listOf("The variable var1 could not be replaced because it was not found")
+        val expectedWarnings = listOf(
+            Warning("The variable var1 could not be replaced because it was not found")
+        )
 
         assertThat(parsedTemplate).isEqualTo(Template("{\$var1}", expectedWarnings))
         assertThat(parsedTemplate.showLogs())
@@ -61,26 +72,30 @@ internal class TemplateEngineShould {
 
     @Test
     fun `parse all occurrences in a template with one variable`() {
-        assertThat(TemplateEngine.parse(
-            "hello {\$placeholder} {\$placeholder}",
-            mapOf<String, String>(Pair("placeholder", "hello"))
-        )).isEqualTo(Template("hello hello hello", emptyList()))
+        assertThat(
+            TemplateEngine.parse(
+                "hello {\$placeholder} {\$placeholder}",
+                mapOf<String, String>(Pair("placeholder", "hello"))
+            )
+        ).isEqualTo(Template("hello hello hello", emptyList()))
     }
 
     @Test
     fun `parse a template with two variables`() {
-        assertThat(TemplateEngine.parse(
-            "hello {\$var1} {\$var2}",
-            mapOf<String, String>(Pair("var1", "my"), Pair("var2", "friend!"))
-        )).isEqualTo(Template("hello my friend!", emptyList()))
+        assertThat(
+            TemplateEngine.parse(
+                "hello {\$var1} {\$var2}",
+                mapOf<String, String>(Pair("var1", "my"), Pair("var2", "friend!"))
+            )
+        ).isEqualTo(Template("hello my friend!", emptyList()))
     }
 
     @Test
     fun `register warnings in a log list when two variables in the template are not provided`() {
         val parsedTemplate = TemplateEngine.parse("{\$var1} {\$var2}", emptyMap())
         val expectedWarnings = listOf(
-            "The variable var1 could not be replaced because it was not found",
-            "The variable var2 could not be replaced because it was not found"
+            Warning("The variable var1 could not be replaced because it was not found"),
+            Warning("The variable var2 could not be replaced because it was not found")
         )
 
         assertThat(parsedTemplate).isEqualTo(Template("{\$var1} {\$var2}", expectedWarnings))
