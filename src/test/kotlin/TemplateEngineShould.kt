@@ -23,13 +23,13 @@ internal class TemplateEngineShould {
     @Test
     fun `parse a template in blank without variables`() {
         assertThat(TemplateEngine.parse("", emptyMap()))
-            .isEqualTo(Template(""))
+            .isEqualTo(Template("", emptyList()))
     }
 
     @Test
     fun `parse a template without variables`() {
         assertThat(TemplateEngine.parse("hola", emptyMap()))
-            .isEqualTo(Template("hola"))
+            .isEqualTo(Template("hola", emptyList()))
     }
 
     @Test
@@ -37,25 +37,26 @@ internal class TemplateEngineShould {
         assertThat(TemplateEngine.parse(
             "hola {\$placeholder}",
             mapOf<String, String>(Pair("placeholder", "mundo"))
-        )).isEqualTo(Template("hola mundo"))
+        )).isEqualTo(Template("hola mundo", emptyList()))
 
         assertThat(TemplateEngine.parse(
             "hello {\$placeholder}",
             mapOf<String, String>(Pair("placeholder", "world!"))
-        )).isEqualTo(Template("hello world!"))
+        )).isEqualTo(Template("hello world!", emptyList()))
 
         assertThat(TemplateEngine.parse(
             "hello {\$var1}",
             mapOf<String, String>(Pair("var1", "world!"))
-        )).isEqualTo(Template("hello world!"))
+        )).isEqualTo(Template("hello world!", emptyList()))
     }
     @Test
     fun `register a warning in a log list when a variable in the template it's not provided`() {
         val parsedTemplate = TemplateEngine.parse("{\$var1}", emptyMap())
+        val expectedWarnings = listOf("The variable var1 could not be replaced because it was not found")
 
-        assertThat(parsedTemplate).isEqualTo(Template("{\$var1}"))
+        assertThat(parsedTemplate).isEqualTo(Template("{\$var1}", expectedWarnings))
         assertThat(parsedTemplate.showLogs())
-            .isEqualTo(listOf("The variable var1 could not be replaced because it was not found"))
+            .isEqualTo(expectedWarnings)
     }
 
     @Test
@@ -63,7 +64,7 @@ internal class TemplateEngineShould {
         assertThat(TemplateEngine.parse(
             "hello {\$placeholder} {\$placeholder}",
             mapOf<String, String>(Pair("placeholder", "hello"))
-        )).isEqualTo(Template("hello hello hello"))
+        )).isEqualTo(Template("hello hello hello", emptyList()))
     }
 
     @Test
@@ -71,7 +72,7 @@ internal class TemplateEngineShould {
         assertThat(TemplateEngine.parse(
             "hello {\$var1} {\$var2}",
             mapOf<String, String>(Pair("var1", "my"), Pair("var2", "friend!"))
-        )).isEqualTo(Template("hello my friend!"))
+        )).isEqualTo(Template("hello my friend!", emptyList()))
     }
 
     @Test
@@ -82,7 +83,7 @@ internal class TemplateEngineShould {
             "The variable var2 could not be replaced because it was not found"
         )
 
-        assertThat(parsedTemplate).isEqualTo(Template("{\$var1} {\$var2}"))
+        assertThat(parsedTemplate).isEqualTo(Template("{\$var1} {\$var2}", expectedWarnings))
         assertThat(parsedTemplate.showLogs()).isEqualTo(expectedWarnings)
     }
 }
