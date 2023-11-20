@@ -11,7 +11,8 @@ import org.junit.jupiter.api.Test
  *  "hola {$placeholder}", [$placeholder: mundo] -> "hola mundo"
  *  "hello {$placeholder}", [$placeholder: world!] -> "hello world!"
  *  "hello {$var1}", [$var1: world!] -> "hello world!"
- *  "{$var1}", [] -> ???
+ *  "{$var1}", [] -> register in logs list
+ *  "hello {$placeholder} {$placeholder}", [placeholder: hello] -> "hello hello hello"
  *  "hello {$var1} ${var2}", [$var1: my, $var2: friend!] -> "hello my friend!"
  *  "{$var1}", [$var2: hola] -> ???
  *  "hola {$a1} {$b2} {$a1}", [$a1: foo, $b2: bar] -> "hola foo bar foo"
@@ -47,7 +48,6 @@ internal class TemplateEngineShould {
             mapOf<String, String>(Pair("var1", "world!"))
         )).isEqualTo(Template("hello world!"))
     }
-
     @Test
     fun `register a warning in a log list when a variable in the template it's not provided`() {
         val parsedTemplate = TemplateEngine.parse("{\$var1}", emptyMap())
@@ -55,5 +55,13 @@ internal class TemplateEngineShould {
         assertThat(parsedTemplate).isEqualTo(Template("{\$var1}"))
         assertThat(parsedTemplate.showLogs())
             .isEqualTo(listOf("The variable var1 could not be replaced because it was not found"))
+    }
+
+    @Test
+    fun `parse all occurrences in a template with one variable`() {
+        assertThat(TemplateEngine.parse(
+            "hello {\$placeholder} {\$placeholder}\"",
+            mapOf<String, String>(Pair("var1", "mundo"))
+        )).isEqualTo(Template("hola mundo"))
     }
 }
