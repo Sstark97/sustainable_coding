@@ -5,8 +5,9 @@ class TemplateEngine {
         // private var logs: List<String> = listOf("La variable var1 no se ha podido sustituir porque no fue encontrada")
 
         fun parse(template: String, templateVariables: Map<String, String>): String {
-            val variableValue = templateVariables.get("placeholder") ?: ""
-            return template.replace("{\$placeholder}", variableValue)
+            val variableValue = templateVariables.values.toTypedArray().firstOrNull() ?: ""
+            val keyToReplace = templateVariables.keys.toTypedArray().firstOrNull() ?: ""
+            return template.replace("{\$" + keyToReplace + "}", variableValue)
         }
 
 //        fun showLogs(): List<String> {
