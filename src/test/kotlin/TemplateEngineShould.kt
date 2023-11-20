@@ -60,8 +60,8 @@ internal class TemplateEngineShould {
     @Test
     fun `parse all occurrences in a template with one variable`() {
         assertThat(TemplateEngine.parse(
-            "hello {\$placeholder} {\$placeholder}\"",
-            mapOf<String, String>(Pair("var1", "mundo"))
-        )).isEqualTo(Template("hola mundo"))
+            "hello {\$placeholder} {\$placeholder}",
+            mapOf<String, String>(Pair("placeholder", "hello"))
+        )).isEqualTo(Template("hello hello hello"))
     }
 }
