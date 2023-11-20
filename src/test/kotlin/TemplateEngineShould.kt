@@ -31,6 +31,10 @@ internal class TemplateEngineShould {
             "hola {\$placeholder}",
             mapOf<String, String>(Pair("placeholder", "mundo"))
         )).isEqualTo("hola mundo")
+        assertThat(TemplateEngine.parse(
+            "hello {\$placeholder}",
+            mapOf<String, String>(Pair("placeholder", "world!"))
+        )).isEqualTo("hello world!")
     }
 
     /**
