@@ -1,4 +1,4 @@
-package dev.kata.stringcalculator
+package dev.kata.template_engine
 
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
@@ -20,12 +20,14 @@ import org.junit.jupiter.api.Test
 internal class TemplateEngineShould {
     @Test
     fun `parse a template in blank without variables`() {
-        assertThat(TemplateEngine.parse("", mapOf<String, String>())).isEqualTo("")
+        assertThat(TemplateEngine.parse("", mapOf<String, String>()))
+            .isEqualTo(Template(""))
     }
 
     @Test
     fun `parse a template without variables`() {
-        assertThat(TemplateEngine.parse("hola", mapOf<String, String>())).isEqualTo("hola")
+        assertThat(TemplateEngine.parse("hola", mapOf<String, String>()))
+            .isEqualTo(Template("hola"))
     }
 
     @Test
@@ -33,15 +35,17 @@ internal class TemplateEngineShould {
         assertThat(TemplateEngine.parse(
             "hola {\$placeholder}",
             mapOf<String, String>(Pair("placeholder", "mundo"))
-        )).isEqualTo("hola mundo")
+        )).isEqualTo(Template("hola mundo"))
+
         assertThat(TemplateEngine.parse(
             "hello {\$placeholder}",
             mapOf<String, String>(Pair("placeholder", "world!"))
-        )).isEqualTo("hello world!")
+        )).isEqualTo(Template("hello world!"))
+
         assertThat(TemplateEngine.parse(
             "hello {\$var1}",
             mapOf<String, String>(Pair("var1", "world!"))
-        )).isEqualTo("hello world!")
+        )).isEqualTo(Template("hello world!"))
     }
 
     /**
